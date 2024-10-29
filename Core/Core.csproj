@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EntitiesDTO\EntitiesDTO.csproj" />
+    <ProjectReference Include="..\EntitiesValidations\EntitiesValidations.csproj" />
+    <ProjectReference Include="..\Infraestructura\Infraestructura.csproj" />
+    <ProjectReference Include="..\UnitOfWorkRepository\UnitOfWorkRepository.csproj" />
+  </ItemGroup>
+
 </Project>

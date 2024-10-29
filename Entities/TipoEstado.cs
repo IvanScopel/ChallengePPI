@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class TipoActivo
+    public class TipoEstado
     {
         [Key]
         public int Id { get; set; }
         [Required]
         public string Descripcion { get; set; }
-
     }
 }
