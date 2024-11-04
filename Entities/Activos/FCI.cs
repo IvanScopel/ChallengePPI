@@ -10,7 +10,7 @@ namespace Entities.Activos
     {
         public override double CalcularMontoTotal(int cantidad)
         {
-            return this.precioUnitario * cantidad;
+            return this.PrecioUnitario * cantidad;
         }
     }
 }

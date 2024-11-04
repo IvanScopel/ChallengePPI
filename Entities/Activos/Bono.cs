@@ -10,7 +10,23 @@ namespace Entities.Activos
     {
         public override double CalcularMontoTotal(int cantidad)
         {
-            throw new NotImplementedException();
+            var totalSinComisiones = cantidad * this.PrecioUnitario;
+            var comision = totalSinComisiones * 0.002;
+            var impuesto = comision * 0.21;
+
+            return totalSinComisiones + comision + impuesto;
+            
+        }
+
+        public double CalcularMontoTotal(int cantidad, double precio)
+        {
+            var totalSinComisiones = cantidad * this.PrecioUnitario;
+            var comision = totalSinComisiones * 0.002;
+            var impuesto = comision * 0.21;
+
+            return totalSinComisiones + comision + impuesto;
+
+
         }
     }
 }

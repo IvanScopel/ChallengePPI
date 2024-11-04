@@ -14,5 +14,7 @@ namespace Entities
         [Required]
         public string Descripcion { get; set; }
 
+        public ICollection<Activo> Activos { get; set; }
+
     }
 }

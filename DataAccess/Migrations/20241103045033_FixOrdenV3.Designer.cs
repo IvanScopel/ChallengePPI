@@ -3,6 +3,7 @@ using DataAccess.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ChallengePPIContext))]
-    partial class ChallengePPIContextModelSnapshot : ModelSnapshot
+    [Migration("20241103045033_FixOrdenV3")]
+    partial class FixOrdenV3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,6 +71,9 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ActivoId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
@@ -76,10 +82,6 @@ namespace DataAccess.Migrations
 
                     b.Property<double>("MontoTotal")
                         .HasColumnType("float");
-
-                    b.Property<string>("NombreActivo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Operacion")
                         .IsRequired()
@@ -92,6 +94,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivoId");
 
                     b.HasIndex("TipoEstadoId");
 
@@ -166,11 +170,19 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Orden", b =>
                 {
+                    b.HasOne("Entities.Activo", "Activo")
+                        .WithMany()
+                        .HasForeignKey("ActivoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entities.TipoEstado", "Estado")
                         .WithMany()
                         .HasForeignKey("TipoEstadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Activo");
 
                     b.Navigation("Estado");
                 });

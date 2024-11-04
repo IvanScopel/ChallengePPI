@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Entities
@@ -27,10 +28,11 @@ namespace Entities
         [Required]
         public char Operacion { get; set; }
 
-        [ForeignKey("TipoActivoId")]
+        [ForeignKey("Estado")]
         public int TipoEstadoId { get; set; }
         public virtual TipoEstado? Estado { get; set; }
         public double MontoTotal { get; set; }
 
+        public bool Borrado;
     }
 }

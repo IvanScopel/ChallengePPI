@@ -14,17 +14,16 @@ namespace Entities
         public int Id { get; set; }
 
         [Required]
-        public string Ticker { get; set; }
+        public string Ticker { get; set; }  
 
         [Required]
-        public string nombre { get; set; }
+        public string Nombre { get; set; }
 
-        [ForeignKey("TipoActivoId")]
         public int TipoActivoId { get; set; }
-        public virtual TipoActivo TipoActivo { get; set; }
+        public virtual TipoActivo? TipoActivo { get; set; }
 
         [Required]
-        public double precioUnitario { get; set; }
+        public double PrecioUnitario { get; set; }
 
         public abstract double CalcularMontoTotal(int cantidad);
     }
