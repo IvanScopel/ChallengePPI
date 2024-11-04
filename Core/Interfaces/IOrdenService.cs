@@ -12,8 +12,10 @@ namespace Core.Interfaces
     {
         bool CreateOrden(OrdenDTO orden);
         Task<bool> CreateOrdenAsync(OrdenDTO orden);
-        Task<bool> DeleteOrden(int idOrden);
+        void DeleteOrden(int idOrden);
+        bool LogicDeleteOrden(int idOrden);
+
         Task<Orden> GetOrden(int idOrden);
-        Task<bool> UpdateOrden(OrdenDTO orden);
+        bool UpdateOrden(int id, int nuevoEstadoId);
     }
 }

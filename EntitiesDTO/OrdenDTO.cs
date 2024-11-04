@@ -8,6 +8,7 @@ namespace EntitiesDTO
 {
     public class OrdenDTO
     {
+
         public int CuentaId { get; set; }
         public int ActivoId{ get; set; }
         public int Cantidad { get; set; }

@@ -17,6 +17,8 @@ namespace Entities
         public string Ticker { get; set; }  
 
         [Required]
+        
+        [StringLength(32, MinimumLength = 2, ErrorMessage = "La longitud del nombre debe ser mayor a 2 y menor a 32")]
         public string Nombre { get; set; }
 
         public int TipoActivoId { get; set; }

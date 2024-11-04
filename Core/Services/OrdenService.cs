@@ -24,7 +24,7 @@ namespace Core.Services
         private readonly IMapper _mapper;
         private readonly ActivoService _activoService;
 
-        public OrdenService(IOrdenRepository ordenRepository, IUnitOfWork unitOfWork, IMapper mapper, ActivoService activoService)
+        public OrdenService(IOrdenRepository ordenRepository, IUnitOfWork unitOfWork, IMapper mapper, ActivoService activoService, IActivoRepository activoRepository)
         {
             _unitOfWork = unitOfWork;
             _ordenRepository = ordenRepository;
@@ -33,9 +33,31 @@ namespace Core.Services
 
         }
 
-        public bool CreateOrden(OrdenDTO orden)
+        public bool CreateOrden(OrdenDTO ordenDTO)
         {
-            throw new NotImplementedException();
+            Orden orden = new Orden();
+
+            orden.CuentaId = ordenDTO.CuentaId;
+            orden.Cantidad = ordenDTO.Cantidad;
+            orden.Operacion = ordenDTO.Operacion;
+            orden.Activo = _activoService.GetActivoById(ordenDTO.ActivoId);
+            orden.MontoTotal = orden.Activo.CalcularMontoTotal(orden.Cantidad);
+            orden.TipoEstadoId = 1;
+            orden.Precio = 1;
+            orden.Borrado = false;
+
+
+            _unitOfWork.BeginTransaction();
+
+            var created =  _ordenRepository.Create(orden);
+
+            if (created)
+                _unitOfWork.Commit();
+            else
+                throw new FailedDependency("Hubo un error al cargar la orden");
+
+            _unitOfWork.CommitTransaction();
+            return created;
         }
 
         public async Task<bool> CreateOrdenAsync(OrdenDTO ordenDTO)
@@ -65,13 +87,15 @@ namespace Core.Services
             return created;
         }
 
-        public async Task<bool> DeleteOrden(int idOrden)
+        public void DeleteOrden(int idOrden)
         {
             var orden = _ordenRepository.FirstOrDefault(x => x.Id == idOrden);
 
-            orden.Borrado = true;
+            if (orden == null)
+                throw new NotAcceptable("No se encontró la orden que quiere borrar");
 
-            return true;
+            _ordenRepository.Remove(orden);
+            _unitOfWork.Commit();
         }
 
         public async Task<Orden> GetOrden(int idOrden)
@@ -81,10 +105,31 @@ namespace Core.Services
             return orden;
         }
 
-      
-        public Task<bool> UpdateOrden(OrdenDTO orden)
+        public bool LogicDeleteOrden(int idOrden)
         {
-            throw new NotImplementedException();
+            var orden = _ordenRepository.FirstOrDefault(x => x.Id == idOrden);
+
+            if (orden == null)
+            {
+                throw new NotAcceptable("No se encontró la orden que quiere borrar");
+            }
+            orden.Borrado = true;
+
+            return true;
+        }
+
+        public bool UpdateOrden(int idOrden, int nuevoEstadoId)
+        {
+            Orden orden = _ordenRepository.FirstOrDefault(x => x.Id != idOrden);
+
+            if (orden == null)
+                throw new NoContent("No se encontró la orden");
+
+            orden.TipoEstadoId = nuevoEstadoId;
+
+            _ordenRepository.Update(orden);
+            _unitOfWork.Commit();
+            return true;
         }
     }
 }
